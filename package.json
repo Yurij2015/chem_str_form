@@ -1,0 +1,10 @@
+{
+  "name": "chem-system-f.loc",
+  "version": "1.0.0",
+  "dependencies": {
+    "three": "^0.128.0"
+  },
+  "devDependencies": {
+    "kekule": "^0.9.3"
+  }
+}

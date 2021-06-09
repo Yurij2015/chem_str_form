@@ -43,6 +43,7 @@
 M  END
 
 
+
 </script>
 <script id="CO" type="chemical/x-mdl-molfile">
 unnamed
@@ -56,8 +57,9 @@ unnamed
   1  3  1  0  0  0  0
 M  END
 
+
 </script>
-<body>
+<body class="container">
 <script>
     // Create a simple CO2 molecule
     let mol = new Kekule.Molecule();
@@ -78,8 +80,7 @@ M  END
     // Output MOL2k (IO module should be loaded in web application)
     let mol2k = Kekule.IO.saveFormatData(mol, 'mol');
     console.log('MOL 2000: \n', mol2k);
-    alert(mol2k)
-
+    // alert(mol2k)
 </script>
 </body>
 </html>
@@ -89,9 +90,25 @@ $formula = R::load('structure_f', 1);
 $molformat = $formula->molformat;
 ?>
 <h3>Редактор структурных формул</h3>
-<div id="editor" style="border: #212121 1px solid"></div>
+<div class="row">
+    <div class="col-md-10">
+        <div id="editor" style="border: #212121 1px solid"></div>
+    </div>
+    <div class="col-md-2">
+        <form>
+            <div>
+                <label for="formula" class="text-dark mb-2">Формула:</label>
+                <textarea class="form-control" id="formula"></textarea>
+                <btn class="btn btn-primary mt-3">Сохранить формулу</btn>
+
+            </div>
+        </form>
+    </div>
+</div>
 <hr>
-<div id="parent"  style="border: red 1px solid;"></div>
+<div class="row align-content-center">
+    <div id="parent" style="border: red 1px solid;"></div>
+</div>
 <hr>
 <script>
     let widget = new Kekule.ChemWidget.PeriodicTable(document.getElementById('parent'));

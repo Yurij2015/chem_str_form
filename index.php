@@ -1,11 +1,12 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="kekule/kekule.js?module=io,chemWidget,algorithm"></script>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="kekule/themes/default/kekule.css"/>
     <title>Formula Editor. Admin</title>
 </head>
@@ -87,11 +88,13 @@ require_once("dbconnect.php");
 $formula = R::load('structure_f', 1);
 $molformat = $formula->molformat;
 ?>
-
-<div id="parent"></div>
+<h3>Редактор структурных формул</h3>
+<div id="editor" style="border: #212121 1px solid"></div>
 <hr>
-<div id="editor"></div>
+<div id="parent"  style="border: red 1px solid;"></div>
+<hr>
 <script>
+    let widget = new Kekule.ChemWidget.PeriodicTable(document.getElementById('parent'));
     const chemViewer = new Kekule.ChemWidget.Viewer(document);
     // var cmlData = '<cml xmlns="http://www.xml-cml.org/schema"><molecule id="m1"><atomArray><atom id="a2" elementType="C" x2="7.493264658965051" y2="35.58088907877604"/><atom id="a3" elementType="O" x2="8.186084981992602" y2="35.18088907877604"/><atom id="a1" elementType="C" x2="6.800444335937501" y2="35.18088907877604"/></atomArray><bondArray><bond id="b2" order="S" atomRefs2="a2 a3"/><bond id="b1" order="S" atomRefs2="a2 a1"/></bondArray></molecule></cml>';
     // let cmlData = '<cml xmlns="http://www.xml-cml.org/schema"><molecule id="m1"><atomArray><atom id="a1" elementType="C" x2="11.653417998547942" y2="36.66624132865448"/><atom id="a2" elementType="C" x2="12.346217998547942" y2="36.26624132865448"/><atom id="a3" elementType="C" x2="11.653417998547942" y2="37.466241328654476"/><atom id="a4" elementType="C" x2="10.960617998547942" y2="36.26624132865448"/><atom id="a5" elementType="C" x2="12.346217998547942" y2="35.466241328654476"/><atom id="a6" elementType="C" x2="10.960617998547942" y2="37.866241328654475"/><atom id="a7" elementType="C" x2="10.960617998547942" y2="35.466241328654476"/><atom id="a8" elementType="C" x2="11.653417998547942" y2="35.06624132865448"/><atom id="a9" elementType="C" x2="13.039117998547942" y2="35.06624132865448"/><atom id="a11" elementType="O" x2="10.267817998547942" y2="37.466241328654476"/><atom id="a10" elementType="O" x2="10.960617998547942" y2="38.66624132865448"/><atom id="a12" elementType="C" x2="13.731917998547942" y2="35.466241328654476"/></atomArray><bondArray><bond id="b1" order="S" atomRefs2="a1 a2"/><bond id="b2" order="S" atomRefs2="a1 a3"/><bond id="b3" order="D" atomRefs2="a1 a4"/><bond id="b4" order="D" atomRefs2="a2 a5"/><bond id="b5" order="S" atomRefs2="a3 a6"/><bond id="b6" order="S" atomRefs2="a4 a7"/><bond id="b7" order="S" atomRefs2="a5 a8"/><bond id="b8" order="S" atomRefs2="a5 a9"/><bond id="b10" order="S" atomRefs2="a6 a11"/><bond id="b9" order="D" atomRefs2="a6 a10"/><bond id="b11" order="D" atomRefs2="a7 a8"/><bond id="b12" order="D" atomRefs2="a9 a12"/></bondArray><metaDataList><metaData name="generator" content="Kekule"/><metaData name="date" content="@Sat Feb 07 2015 07:26:58 GMT+0300 (Moscow Standard Time)"/></metaDataList></molecule></cml>';
@@ -136,10 +139,9 @@ $molformat = $formula->molformat;
     // let myMolecule = Kekule.IO.loadFormatData(cmlData, 'cml');
     chemViewer.setChemObj(myMolecule);
     let molecule = chemViewer.getChemObj();
-    let widget = new Kekule.ChemWidget.PeriodicTable(document.getElementById('editor'));
     let resId = 'url(#molResInsideElem)';
-    chemViewer.setDimension('800px', '800px');
-    chemViewer.appendToElem(document.getElementById('parent')).setChemObj(molecule);
+    chemViewer.setDimension('100%', '800px');
+    chemViewer.appendToElem(document.getElementById('editor')).setChemObj(molecule);
     chemViewer.setEnableToolbar(true);  // enable the toolbar
     chemViewer.setToolButtons(['loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
         'zoomIn', 'zoomOut',

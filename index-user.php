@@ -2,22 +2,17 @@
 require_once("dbconnect.php");
 $id = $_GET['id'] ?: 1;
 $formula = R::load('chemicals', $id);
-if ($_POST['update']) {
-    $molformat = $_POST['molformat'];
+if ($_POST['formulaname']) {
     $formulaname = $_POST['formulaname'];
-    $formula->substance_name = $formulaname;
-    $formula->molformat = $molformat;
-    R::store($formula);
-}
-
-if ($_POST['createnew']) {
-    $formulacreate = R::dispense('chemicals');
-    $molformat = $_POST['molformat'];
-    $formulaname = $_POST['formulaname'];
-    $formulacreate->substance_name = $formulaname;
-    $formulacreate->molformat = $molformat;
-    $createid = R::store($formulacreate);
-    header('location: index.php?id=' . $createid . '&msg=Новая формула успешно добавлена!');
+    $formula = R::findOne('chemicals', ' substance_name = ? ', [$formulaname]);
+    if (!$formula) {
+        ?>
+        <script>
+            alert("Формула не найдена!");
+            document.location.href = 'index-user.php'
+        </script>
+        <?php
+    }
 }
 ?>
 <!doctype html>
@@ -39,7 +34,7 @@ require_once "include/navbar.php";
 $molformat = $formula->molformat;
 $formulaname = $formula->substance_name;
 ?>
-<h3>Редактор структурных формул</h3>
+<h3>Просмотр структурных формул</h3>
 <div class="row">
     <div class="col-md-9">
         <div id="editor" style="border: #212121 1px solid"></div>
@@ -51,12 +46,8 @@ $formulaname = $formula->substance_name;
                 <input class="form-control" id="name" name="formulaname" value="<?= $formulaname ?>">
                 <label for="formula" class="text-dark mb-2">Формула:</label>
                 <textarea class="form-control" id="formula" name="molformat" rows="12" style="font-size:
-                12px"><?= $molformat ?></textarea>
-                <input type="submit" class="btn btn-primary mt-3" name="update" value="Обновить формулу">
-
-                <input type="submit" class="btn btn-primary mt-3" name="createnew" value="Создать новую">
-                <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу">
-
+                12px" disabled><?= $molformat ?></textarea>
+                <input type="submit" class="btn btn-primary mt-3" name="search" value="Найти формулу">
             </div>
         </form>
     </div>
@@ -75,13 +66,10 @@ $formulaname = $formula->substance_name;
     let molecule = chemViewer.getChemObj();
     chemViewer.setDimension('100%', '800px');
     chemViewer.appendToElem(document.getElementById('editor')).setChemObj(molecule);
-    chemViewer.setEnableToolbar(true);  // enable the toolbar
-    chemViewer.setToolButtons(['loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
-        'zoomIn', 'zoomOut',
-        'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
-        'reset', 'openEditor', 'config']);
-    chemViewer.setEnableDirectInteraction(true);
-    chemViewer.setEnableEdit(true);
+    chemViewer.setEnableToolbar(false);  // enable the toolbar
+    chemViewer.setToolButtons([]);
+    chemViewer.setEnableDirectInteraction(false);
+    chemViewer.setEnableEdit(false);
     chemViewer.setToolbarEvokeModes([Kekule.Widget.EvokeMode.ALWAYS]);
     console.log(myMolecule);
 </script>

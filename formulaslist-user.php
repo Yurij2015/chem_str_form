@@ -7,10 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="kekule/kekule.js?module=io,chemWidget,algorithm"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="js/confirm-delete.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="kekule/themes/default/kekule.css"/>
-    <title>Formulas List. Admin</title>
+    <title>Formulas List. User</title>
 </head>
 <body class="container">
 <?php
@@ -66,9 +65,8 @@ require_once "include/navbar.php";
                         </script>
                     </td>
                     <td>
-                        <a href="index.php?id=<?= $formula['id'] ?>" style="text-decoration: none">Открыть
-                            редактор</a><br>
-                        <a href="delete.php?id=<?= $formula['id'] ?>" style="text-decoration: none" onclick='return confirmDelete();'>Удалить формулу</a>
+                        <a href="index-user.php?id=<?= $formula['id'] ?>" style="text-decoration: none">Открыть
+                            формулу</a>
                     </td>
                 </tr>
                 <?php

@@ -8,7 +8,14 @@
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
                 <a class="nav-link active" aria-current="page" href="index.php">Главная</a>
-                <a class="nav-link" href="formulaslist.php">Список формул</a>
+                <a class="nav-link" href="formulaslist.php">Вещества</a>
+                <a class="nav-link" href="reaction.php">Реакции</a>
+            </div>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <div class="nav navbar-nav navbar-right">
+                <a class="nav-link" href="formulaslist.php">Admin</a>
+                <a class="nav-link" href="formulaslist-user.php">User</a>
             </div>
         </div>
     </div>

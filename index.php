@@ -97,8 +97,8 @@ $formulaname = $formula->substance_name;
             'htmlClass': 'K-Res-Button-YesOk',  // show a OK icon
             'showText': true,   // display caption of button
             '#execute': function () {
-                alert('Формула ' + idFormula + ' обновлена');
                 dumpObject()
+                alert('Формула ' + idFormula + ' обновлена');
             }  // event
             // handler when executing the
             // button
@@ -120,10 +120,31 @@ $formulaname = $formula->substance_name;
     function dumpObject() {
         let molecule = chemViewer.getChemObj();
         let cmlData = Kekule.IO.saveFormatData(molecule, 'mol');
+        let newElForm = molecule.calcFormula();
+        sendStructFormCode(cmlData, idFormula);
+        console.log(newElForm.getText());
         console.log(cmlData);
+        // document.location.href = 'index.php?id=' + idFormula;
     }
 
-</script>
+    function sendStructFormCode(structFormCode, idFormula) {
+        if (structFormCode.length === 0) {
+            alert("Пусто. Нет кода для отправки на сервер!")
+        } else {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    console.log(this.response);
+                }
+            };
+            xmlhttp.open("GET", "ajax-handler.php?structFormCode=" + encodeURIComponent(structFormCode) +
+                "&idFormula=" + idFormula, true);
+            xmlhttp.timeout = 5000;
+            xmlhttp.send();
+        }
+    }
 
+
+</script>
 </body>
 </html>

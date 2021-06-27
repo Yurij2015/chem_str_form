@@ -72,6 +72,7 @@ $formulaname = $formula->substance_name;
 <script>
     let widget = new Kekule.ChemWidget.PeriodicTable(document.getElementById('parent'));
     const chemViewer = new Kekule.ChemWidget.Viewer(document);
+    let idFormula = <?php echo "id =" . $id ?>;
     let cmlData = <?php echo "`\r" . $molformat . '`'; ?>;
     let myMolecule = Kekule.IO.loadFormatData(cmlData, 'mol');
     chemViewer.setChemObj(myMolecule);
@@ -82,7 +83,27 @@ $formulaname = $formula->substance_name;
     chemViewer.setToolButtons(['loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
         'zoomIn', 'zoomOut',
         'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
-        'reset', 'openEditor', 'config']);
+        'reset', 'openEditor', 'config'
+    ]);
+
+
+    chemViewer.setToolButtons([
+        'loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
+        'zoomIn', 'zoomOut',
+        'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
+        'reset', 'openEditor', 'config',
+        {
+            'text': 'Сохранить / обновить формулу',  // button caption
+            'htmlClass': 'K-Res-Button-YesOk',  // show a OK icon
+            'showText': true,   // display caption of button
+            '#execute': function () {
+                alert('Формула ' + idFormula + ' обновлена');
+                dumpObject()
+            }  // event
+            // handler when executing the
+            // button
+        }
+    ]);
     chemViewer.setEnableDirectInteraction(true);
     chemViewer.setEnableEdit(true);
     chemViewer.setToolbarEvokeModes([Kekule.Widget.EvokeMode.ALWAYS]);
@@ -94,6 +115,14 @@ $formulaname = $formula->substance_name;
     console.log(formula.getText());
     // console.log(myMolecule());
     console.log(cmlData);
+
+    // получаем данные обновленной формулы в редакторе и отправляем на сервер
+    function dumpObject() {
+        let molecule = chemViewer.getChemObj();
+        let cmlData = Kekule.IO.saveFormatData(molecule, 'mol');
+        console.log(cmlData);
+    }
+
 </script>
 
 </body>

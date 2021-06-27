@@ -47,6 +47,9 @@ $formulaname = $formula->substance_name;
     <div class="col-md-3">
         <form method="post">
             <div>
+                <hr>
+                <a href="create-new-formula.php" style="width: 100%;" class="btn btn-primary">Добавить новую формулу</a>
+                <hr>
                 <label for="name" class="text-dark mb-2">Наименование:</label>
                 <input class="form-control" id="name" name="formulaname" value="<?= $formulaname ?>">
                 <label for="formula" class="text-dark mb-2">Формула:</label>
@@ -83,7 +86,14 @@ $formulaname = $formula->substance_name;
     chemViewer.setEnableDirectInteraction(true);
     chemViewer.setEnableEdit(true);
     chemViewer.setToolbarEvokeModes([Kekule.Widget.EvokeMode.ALWAYS]);
-    console.log(myMolecule);
+    // chemViewer.setAutofit(true);
+    // get molecule in editor
+    // get the formula object
+    let formula = myMolecule.calcFormula();
+    // turn formula object into text
+    console.log(formula.getText());
+    // console.log(myMolecule());
+    console.log(cmlData);
 </script>
 
 </body>

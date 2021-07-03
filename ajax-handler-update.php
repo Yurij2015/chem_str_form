@@ -8,8 +8,8 @@ if ($_GET['structFormCode']) {
     $molformat = $_GET['structFormCode'];
     $molformat = str_replace('unnamed'."\n", '', $molformat);
     $formula->molformat = $molformat;
-    R::store($formula);
-    echo "Формула обновлена!";
+    $updateid = R::store($formula);
+    echo $updateid;
 } else {
     echo "Что-то не то!";
 }

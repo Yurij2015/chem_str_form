@@ -44,7 +44,7 @@ M  END";
 //$molformat = $formula->molformat;
 $formulaname = $formula->substance_name;
 ?>
-<h3>Добавить новую структурную формулу</h3>
+<h3 class="mb-5 mt-5">Добавить новую структурную формулу</h3>
 <div class="row">
     <div class="col-md-9">
         <div id="editor" style="border: #212121 1px solid"></div>
@@ -120,19 +120,23 @@ $formulaname = $formula->substance_name;
     }
 
     function sendStructFormCode(structFormCode) {
+        let response = null;
         if (structFormCode.length === 0) {
             alert("Пусто. Нет кода для отправки на сервер!")
         } else {
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
-                    console.log(this.response);
+                    console.log("Формула " + this.response + " добавлена");
+                    response = this.response;
                 }
             };
-            xmlhttp.open("GET", "ajax-handler.php?structFormCode=" + encodeURIComponent(structFormCode), true);
+            xmlhttp.open("GET", "ajax-handler-create.php?structFormCode=" + encodeURIComponent(structFormCode), true);
             xmlhttp.timeout = 5000;
             xmlhttp.send();
             alert('Формула добавлена');
+            document.location.href = 'index.php?id=' + response;
+
         }
     }
 

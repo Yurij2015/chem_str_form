@@ -36,10 +36,24 @@ if ($_POST['createnew']) {
 <body class="container">
 <?php
 require_once "include/navbar.php";
-$molformat = $formula->molformat;
+$new_mol_format = " new_formula 
+
+  0  0  0     0  0              0 V3000
+M  V30 BEGIN CTAB
+M  V30 COUNTS 2 1 0 0 0
+M  V30 BEGIN ATOM
+M  V30 1 C 4.831642 45.073448 0.000000 0
+M  V30 2 C 4.138800 44.673435 0.000000 0
+M  V30 END ATOM
+M  V30 BEGIN BOND
+M  V30 1 1 1 2
+M  V30 END BOND
+M  V30 END CTAB
+M  END";
+$molformat = $formula->molformat ?: $new_mol_format;
 $formulaname = $formula->substance_name;
 ?>
-<h3>Редактор структурных формул</h3>
+<h3 class="mb-5 mt-5">Редактор структурных формул</h3>
 <div class="row">
     <div class="col-md-9">
         <div id="editor" style="border: #212121 1px solid"></div>
@@ -134,10 +148,10 @@ $formulaname = $formula->substance_name;
             let xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = function () {
                 if (this.readyState === 4 && this.status === 200) {
-                    console.log(this.response);
+                    console.log("Формула " + this.response + " обновлена");
                 }
             };
-            xmlhttp.open("GET", "ajax-handler.php?structFormCode=" + encodeURIComponent(structFormCode) +
+            xmlhttp.open("GET", "ajax-handler-update.php?structFormCode=" + encodeURIComponent(structFormCode) +
                 "&idFormula=" + idFormula, true);
             xmlhttp.timeout = 5000;
             xmlhttp.send();

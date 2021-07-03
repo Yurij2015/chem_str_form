@@ -52,6 +52,7 @@ M  V30 END CTAB
 M  END";
 $molformat = $formula->molformat ?: $new_mol_format;
 $formulaname = $formula->substance_name;
+$chemical_formula = $formula->chemical_formula ?: "NULL";
 ?>
 <h3 class="mb-5 mt-5">Редактор структурных формул</h3>
 <div class="row">
@@ -73,7 +74,7 @@ $formulaname = $formula->substance_name;
 
                 <input type="submit" class="btn btn-primary mt-3" name="createnew" value="Создать новую">
                 <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу">
-
+                <br><span><?= $chemical_formula ?></span>
             </div>
         </form>
     </div>
@@ -84,9 +85,10 @@ $formulaname = $formula->substance_name;
 </div>
 <hr>
 <script>
+    let chemical_formula = '<?php echo $chemical_formula?>';
     let widget = new Kekule.ChemWidget.PeriodicTable(document.getElementById('parent'));
     const chemViewer = new Kekule.ChemWidget.Viewer(document);
-    let idFormula = <?php echo "id =" . $id ?>;
+    let idFormula = <?php echo "id = " . $id ?>;
     let cmlData = <?php echo "`\r" . $molformat . '`'; ?>;
     let myMolecule = Kekule.IO.loadFormatData(cmlData, 'mol');
     chemViewer.setChemObj(myMolecule);
@@ -112,7 +114,7 @@ $formulaname = $formula->substance_name;
             'showText': true,   // display caption of button
             '#execute': function () {
                 dumpObject()
-                alert('Формула ' + idFormula + ' обновлена');
+                // alert('Формула ' + idFormula + ' обновлена');
             }  // event
             // handler when executing the
             // button
@@ -135,13 +137,19 @@ $formulaname = $formula->substance_name;
         let molecule = chemViewer.getChemObj();
         let cmlData = Kekule.IO.saveFormatData(molecule, 'mol');
         let newElForm = molecule.calcFormula();
-        sendStructFormCode(cmlData, idFormula);
+        if (newElForm.getText().split('').sort().join('') === chemical_formula.split('').sort().join('')) {
+            sendStructFormCode(cmlData, idFormula, newElForm);
+        } else {
+            console.log("Формула не может быть обновлена. Несоотвествие с элементарной формулой!")
+            alert("Формула не может быть обновлена. Несоотвествие с элементарной формулой!");
+        }
         console.log(newElForm.getText());
         console.log(cmlData);
         // document.location.href = 'index.php?id=' + idFormula;
+        console.log(newElForm.getText().split('').sort().join('') === chemical_formula.split('').sort().join(''))
     }
 
-    function sendStructFormCode(structFormCode, idFormula) {
+    function sendStructFormCode(structFormCode, idFormula, newElForm) {
         if (structFormCode.length === 0) {
             alert("Пусто. Нет кода для отправки на сервер!")
         } else {
@@ -152,13 +160,15 @@ $formulaname = $formula->substance_name;
                 }
             };
             xmlhttp.open("GET", "ajax-handler-update.php?structFormCode=" + encodeURIComponent(structFormCode) +
-                "&idFormula=" + idFormula, true);
+                "&idFormula=" + idFormula + "&newElForm=" + newElForm.getText() + "&chemical_formula=" +
+                chemical_formula, true);
             xmlhttp.timeout = 5000;
             xmlhttp.send();
+            alert('Формула ' + idFormula + ' обновлена');
         }
     }
 
-
+    console.log(chemical_formula);
 </script>
 </body>
 </html>

@@ -146,7 +146,10 @@ $chemical_formula = $formula->chemical_formula ?: "NULL";
         console.log(newElForm.getText());
         console.log(cmlData);
         // document.location.href = 'index.php?id=' + idFormula;
-        console.log(newElForm.getText().split('').sort().join('') === chemical_formula.split('').sort().join(''))
+        console.log(newElForm.getText().split('').sort().join('') === chemical_formula.split('').sort().join(''));
+        console.log(newElForm.getText().split('').sort().join(''));
+        console.log(chemical_formula.split('').sort().join(''));
+
     }
 
     function sendStructFormCode(structFormCode, idFormula, newElForm) {

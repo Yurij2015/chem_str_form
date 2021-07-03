@@ -81,10 +81,62 @@ $formulaname = $formula->substance_name;
         'zoomIn', 'zoomOut',
         'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
         'reset', 'openEditor', 'config']);
+
+    chemViewer.setToolButtons([
+        'loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
+        'zoomIn', 'zoomOut',
+        'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
+        'reset', 'openEditor', 'config',
+        {
+            'text': 'Сохранить / обновить формулу',  // button caption
+            'htmlClass': 'K-Res-Button-YesOk',  // show a OK icon
+            'showText': true,   // display caption of button
+            '#execute': function () {
+                dumpObject()
+            }  // event
+            // handler when executing the
+            // button
+        }
+    ]);
+
     chemViewer.setEnableDirectInteraction(true);
     chemViewer.setEnableEdit(true);
     chemViewer.setToolbarEvokeModes([Kekule.Widget.EvokeMode.ALWAYS]);
-    console.log(myMolecule);
+    let formula = myMolecule.calcFormula();
+    // turn formula object into text
+    console.log(formula.getText());
+    // console.log(myMolecule());
+    console.log(cmlData);
+
+    // получаем данные обновленной формулы в редакторе и отправляем на сервер
+    function dumpObject() {
+        let molecule = chemViewer.getChemObj();
+        let cmlData = Kekule.IO.saveFormatData(molecule, 'mol');
+        let newElForm = molecule.calcFormula();
+        sendStructFormCode(cmlData);
+        console.log(newElForm.getText());
+        console.log(cmlData);
+        // document.location.href = 'index.php?id=' + idFormula;
+    }
+
+    function sendStructFormCode(structFormCode) {
+        if (structFormCode.length === 0) {
+            alert("Пусто. Нет кода для отправки на сервер!")
+        } else {
+            let xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    console.log(this.response);
+                }
+            };
+            xmlhttp.open("GET", "ajax-handler.php?structFormCode=" + encodeURIComponent(structFormCode), true);
+            xmlhttp.timeout = 5000;
+            xmlhttp.send();
+            alert('Формула добавлена');
+        }
+    }
+
+
 </script>
 
 </body>

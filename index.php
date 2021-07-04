@@ -19,6 +19,20 @@ if ($_POST['createnew']) {
     $createid = R::store($formulacreate);
     header('location: index.php?id=' . $createid . '&msg=Новая формула успешно добавлена!');
 }
+
+if ($_POST['delete']) {
+    try {
+        if (isset($_GET['id'])) {
+            $id = $_GET['id'];
+            $formula = R::load('chemicals', $id);
+            R::trash($formula);
+            header('location: formulaslist.php?msg=Запись удалена!');
+        }
+    } catch (exception $e) {
+        echo "Запись нельзя удалить. Есть связанные данные!";
+        echo "<br><a href = 'index.php'>Назад</a>";
+    }
+}
 ?>
 <!doctype html>
 <html lang="ru">
@@ -29,6 +43,7 @@ if ($_POST['createnew']) {
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="kekule/kekule.js?module=io,chemWidget,algorithm"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/confirm-delete.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="kekule/themes/default/kekule.css"/>
     <title>Formula Editor. Admin</title>
@@ -73,7 +88,7 @@ $chemical_formula = $formula->chemical_formula ?: "NULL";
                 <input type="submit" class="btn btn-primary mt-3" name="update" value="Обновить формулу">
 
                 <input type="submit" class="btn btn-primary mt-3" name="createnew" value="Создать новую">
-                <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу">
+                <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу" onclick='return confirmDelete();'>
                 <br><span><?= $chemical_formula ?></span>
             </div>
         </form>

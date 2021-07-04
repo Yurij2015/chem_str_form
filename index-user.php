@@ -67,8 +67,8 @@ $formulaname = $formula->substance_name;
     let molecule = chemViewer.getChemObj();
     chemViewer.setDimension('100%', '800px');
     chemViewer.appendToElem(document.getElementById('editor')).setChemObj(molecule);
-    chemViewer.setEnableToolbar(false);  // enable the toolbar
-    chemViewer.setToolButtons([]);
+    chemViewer.setEnableToolbar(true);  // enable the toolbar
+    chemViewer.setToolButtons(['molDisplayType', 'molHideHydrogens', 'zoomIn', 'zoomOut']);
     chemViewer.setEnableDirectInteraction(false);
     chemViewer.setEnableEdit(false);
     chemViewer.setToolbarEvokeModes([Kekule.Widget.EvokeMode.ALWAYS]);

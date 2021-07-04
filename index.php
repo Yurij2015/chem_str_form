@@ -42,7 +42,7 @@ if ($_POST['delete']) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="kekule/kekule.js?module=io,chemWidget,algorithm"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
     <script src="js/confirm-delete.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="kekule/themes/default/kekule.css"/>
@@ -111,13 +111,7 @@ $chemical_formula = $formula->chemical_formula ?: "NULL";
     chemViewer.setDimension('100%', '800px');
     chemViewer.appendToElem(document.getElementById('editor')).setChemObj(molecule);
     chemViewer.setEnableToolbar(true);  // enable the toolbar
-    chemViewer.setToolButtons(['loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
-        'zoomIn', 'zoomOut',
-        'rotateLeft', 'rotateRight', 'rotateX', 'rotateY', 'rotateZ',
-        'reset', 'openEditor', 'config'
-    ]);
-
-
+    // chemViewer.setPredefinedSetting('fullFunc');
     chemViewer.setToolButtons([
         'loadData', 'saveData', 'molDisplayType', 'molHideHydrogens',
         'zoomIn', 'zoomOut',
@@ -129,10 +123,8 @@ $chemical_formula = $formula->chemical_formula ?: "NULL";
             'showText': true,   // display caption of button
             '#execute': function () {
                 dumpObject()
-                // alert('Формула ' + idFormula + ' обновлена');
             }  // event
             // handler when executing the
-            // button
         }
     ]);
     chemViewer.setEnableDirectInteraction(true);

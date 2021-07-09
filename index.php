@@ -7,7 +7,12 @@ if ($_POST['update']) {
     $formulaname = $_POST['formulaname'];
     $formula->substance_name = $formulaname;
     $formula->molformat = $molformat;
-    R::store($formula);
+    try {
+        $createid = R::store($formula);
+        header('location: index.php?id=' . $createid . '&msg=Формула успешно обновлена!');
+    } catch (Exception $e) {
+        header('location: index.php?id=' . $id . '&msg=Формула не может быть сохранена! Формула с таким названием уже существует!');
+    }
 }
 
 if ($_POST['createnew']) {
@@ -16,8 +21,12 @@ if ($_POST['createnew']) {
     $formulaname = $_POST['formulaname'];
     $formulacreate->substance_name = $formulaname;
     $formulacreate->molformat = $molformat;
-    $createid = R::store($formulacreate);
-    header('location: index.php?id=' . $createid . '&msg=Новая формула успешно добавлена!');
+    try {
+        $createid = R::store($formulacreate);
+        header('location: index.php?id=' . $createid . '&msg=Новая формула успешно добавлена!');
+    } catch (Exception $e) {
+        header('location: index.php?id=' . $id . '&msg=Новая формула не может быть добавлена! Формула с таким названием уже существует!');
+    }
 }
 
 if ($_POST['delete']) {
@@ -34,6 +43,13 @@ if ($_POST['delete']) {
     }
 }
 ?>
+<?php
+$msg = $_GET['msg'];
+if ($msg) { ?>
+    <script>
+        alert("<?= $msg ?>")
+    </script>
+<?php } ?>
 <!doctype html>
 <html lang="ru">
 <head>
@@ -42,7 +58,7 @@ if ($_POST['delete']) {
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="kekule/kekule.js?module=io,chemWidget,algorithm"></script>
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+    <!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
     <script src="js/confirm-delete.js"></script>
     <link rel="stylesheet" type="text/css" href="css/bootstrap/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="kekule/themes/default/kekule.css"/>
@@ -88,7 +104,8 @@ $chemical_formula = $formula->chemical_formula ?: "NULL";
                 <input type="submit" class="btn btn-primary mt-3" name="update" value="Обновить формулу">
 
                 <input type="submit" class="btn btn-primary mt-3" name="createnew" value="Создать новую">
-                <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу" onclick='return confirmDelete();'>
+                <input type="submit" class="btn btn-primary mt-3" name="delete" value="Удалить формулу"
+                       onclick='return confirmDelete();'>
                 <br><span><?= $chemical_formula ?></span>
             </div>
         </form>

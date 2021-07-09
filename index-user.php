@@ -2,10 +2,22 @@
 require_once("dbconnect.php");
 $id = $_GET['id'] ?: 1;
 $formula = R::load('chemicals', $id);
-if ($_POST['formulaname'] || $_POST['molformat']) {
+if ($_POST['search-title']) {
     $formulaname = $_POST['formulaname'];
+    $formula = R::findOne('chemicals', 'substance_name = ?', [$formulaname]);
+    if (!$formula) {
+        ?>
+        <script>
+            alert("Формула не найдена!");
+            document.location.href = 'index-user.php'
+        </script>
+        <?php
+    }
+}
+if ($_POST['search-code']) {
     $molformat = $_POST['molformat'];
-    $formula = R::findOne('chemicals', ' substance_name = ? OR molformat = ?', [$formulaname, $molformat]);
+    $formula = R::findOne('chemicals', 'molformat LIKE :molformat ', [':molformat' => '%' . $molformat .
+        '%']);
     if (!$formula) {
         ?>
         <script>
@@ -42,13 +54,21 @@ $formulaname = $formula->substance_name;
     </div>
     <div class="col-md-3">
         <form method="post">
-            <div>
+            <div class="form-group">
                 <label for="name" class="text-dark mb-2">Наименование:</label>
                 <input class="form-control" id="name" name="formulaname" value="<?= $formulaname ?>">
+            </div>
+            <div class="form-group">
                 <label for="formula" class="text-dark mb-2">Формула:</label>
                 <textarea class="form-control" id="formula" name="molformat" rows="12" style="font-size:
                 12px"><?= $molformat ?></textarea>
-                <input type="submit" class="btn btn-primary mt-3" name="search" value="Найти формулу">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary mt-3" name="search-title"
+                       value="Найти формулу по названию">
+            </div>
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary mt-3" name="search-code" value="Найти формулу по коду">
             </div>
         </form>
     </div>

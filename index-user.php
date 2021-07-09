@@ -16,8 +16,9 @@ if ($_POST['search-title']) {
 }
 if ($_POST['search-code']) {
     $molformat = $_POST['molformat'];
-    $formula = R::findOne('chemicals', 'molformat LIKE :molformat ', [':molformat' => '%' . $molformat .
-        '%']);
+//    $formula = R::findOne('chemicals', 'molformat LIKE :molformat ', [':molformat' => '%' . $molformat . '%']);
+    $formula = R::findOne('chemicals', ' MATCH(molformat) AGAINST(:molformat) ', [':molformat' => $molformat]);
+
     if (!$formula) {
         ?>
         <script>
